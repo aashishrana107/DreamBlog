@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>@ViewData["Title"] -Dream</title>
+	<link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="~/css/clean-blog.min.css" rel="stylesheet">
+</head>
+
+<body>
+	<header>
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+			<div class="container">
+				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DreamBlog</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+			</div>
+		</nav>
+	</header>
+	<div class="container">
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
+	</div>
+
+	<footer class="border-top footer text-muted">
+		<div class="container">
+			&copy; @DateTime.Now.Year - DreamBlog - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+		</div>
+	</footer>
+	<script src="~/vendor/jquery/jquery.min.js"></script>
+	<script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/clean-blog.min.js"></script>
+	@RenderSection("Scripts", required: false)
+</body>
+</html>
+
+
+
