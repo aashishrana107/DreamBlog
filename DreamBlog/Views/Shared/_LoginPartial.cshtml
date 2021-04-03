@@ -7,7 +7,8 @@
 {
     <li class="nav-item">
         @*<a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>*@
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserAsync(User).Result.FirstName </a>
+        @*<a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserAsync(User).Result.FirstName </a>*@
+        <a class="nav-link" asp-controller="Admin" asp-action="Index">Hello @UserManager.GetUserAsync(User).Result.FirstName </a>
     </li>
     <li class="nav-item">
         <a onclick="$('#LogOutForm').submit();" style="cursor:pointer" class="nav-link">Logout</a>

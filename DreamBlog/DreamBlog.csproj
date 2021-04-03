@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DreamBlog.Data\DreamBlog.Data.csproj" />
+    <ProjectReference Include="..\DreamBlog.Service\DreamBlog.Service.csproj" />
   </ItemGroup>
 
 </Project>

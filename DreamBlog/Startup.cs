@@ -1,5 +1,8 @@
+using DreamBlog.BusinessManagers;
 using DreamBlog.Data;
 using DreamBlog.Data.Models;
+using DreamBlog.Service;
+using DreamBlog.Service.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,11 +35,23 @@ namespace DreamBlog
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            //Add Reference With Contract Ashish
+            services.AddScoped<IBlogBusinessManager, BlogBusinessManager>();
+            services.AddScoped<IBlogServices, BlogServices>();
+
+
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
+            //services.AddCustomServices();
         }
+
+        //public static void AddCustomServices(this IServiceCollection serviceCollection)
+        //{
+        //    serviceCollection.AddScoped<IBlogBusinessManager, IBlogBusinessManager>();
+        //}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         //AppConfigure
