@@ -1,45 +1,40 @@
-﻿@model DreamBlog.Models.BlogViewModel.CreateViewModel
-
-@*02.25 9*@
+﻿@model DreamBlog.Models.AdminViewModel.AboutViewModel
 
 
 <div class="container-fluid">
-    <h1 class="mt-4">Create</h1>
+    <h1 class="mt-4">About Me</h1>
     <div class="row">
         <div class="col-lg-6">
             <div class="card mb-4">
-                <form asp-controller="Blog" asp-action="Add" method="post" enctype="multipart/form-data">
+                <form asp-controller="Admin" asp-action="UpdateAbout" method="post" enctype="multipart/form-data">
                     <div class="card-header">
                         <i class="fas fa-pen-fancy mr-1"></i>
-                        Write a Post
+                        Update your About Me info!
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label asp-for="BlogHeaderImage"></label>
+                            <label asp-for="HeaderImage"></label>
                             <div class="custom-file">
-                                <input asp-for="BlogHeaderImage" class="custom-file-input" accept="image/*" />
+                                <input asp-for="HeaderImage" class="custom-file-input" accept="image/*" />
                                 <label class="custom-file-label">Choose file</label>
                             </div>
-                            <span asp-validation-for="BlogHeaderImage" class="text-danger"></span>
+                            <span asp-validation-for="HeaderImage" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Blog.Title"></label>
-                            <input asp-for="Blog.Title" class="form-control" required />
-                            <span asp-validation-for="Blog.Title" class="text-danger"></span>
+                            <label asp-for="SubHeader"></label>
+                            <input asp-for="SubHeader" class="form-control" required />
+                            <span asp-validation-for="SubHeader" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="Blog.Content"></label>
-                            <textarea asp-for="Blog.Content" class="form-control textarea" rows="8"></textarea>
-                            <span asp-validation-for="Blog.Content" class="text-danger"></span>
+                            <label asp-for="Content"></label>
+                            <textarea asp-for="Content" class="form-control textarea" rows="8"></textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="card-footer">
                         <div class="form-group">
-                            <p class="text-muted">Publish now or save for later edits.</p>
-                            <label>Publish now?</label>
-                            <input type="checkbox" data-toggle="toggle" asp-for="Blog.Published">
-                            </br>
                             <button class="btn btn-primary" type="submit">Submit</button>
+                            <a class="btn btn-secondary float-right" asp-controller="Home" asp-action="Author" asp-route-authorId="@Model.ApplicationUser.Id">View</a>
                         </div>
                     </div>
                 </form>

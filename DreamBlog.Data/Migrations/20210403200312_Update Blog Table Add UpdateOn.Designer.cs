@@ -4,14 +4,16 @@ using DreamBlog.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DreamBlog.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210403200312_Update Blog Table Add UpdateOn")]
+    partial class UpdateBlogTableAddUpdateOn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,9 +25,6 @@ namespace DreamBlog.Data.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AboutContent")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -71,9 +70,6 @@ namespace DreamBlog.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SubHeader")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -136,12 +132,18 @@ namespace DreamBlog.Data.Migrations
                     b.ToTable("Blogs");
                 });
 
-            modelBuilder.Entity("DreamBlog.Data.Models.Comment", b =>
+            modelBuilder.Entity("DreamBlog.Data.Models.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Approved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ApproverId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("BlogId")
                         .HasColumnType("int");
@@ -160,13 +162,15 @@ namespace DreamBlog.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApproverId");
+
                     b.HasIndex("BlogId");
 
                     b.HasIndex("ParentId");
 
                     b.HasIndex("PostById");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -315,14 +319,18 @@ namespace DreamBlog.Data.Migrations
                         .HasForeignKey("CreatorId");
                 });
 
-            modelBuilder.Entity("DreamBlog.Data.Models.Comment", b =>
+            modelBuilder.Entity("DreamBlog.Data.Models.Post", b =>
                 {
+                    b.HasOne("DreamBlog.Data.Models.ApplicationUser", "Approver")
+                        .WithMany()
+                        .HasForeignKey("ApproverId");
+
                     b.HasOne("DreamBlog.Data.Models.Blog", "Blog")
-                        .WithMany("Comments")
+                        .WithMany("Posts")
                         .HasForeignKey("BlogId");
 
-                    b.HasOne("DreamBlog.Data.Models.Comment", "Parent")
-                        .WithMany("Comments")
+                    b.HasOne("DreamBlog.Data.Models.Post", "Parent")
+                        .WithMany()
                         .HasForeignKey("ParentId");
 
                     b.HasOne("DreamBlog.Data.Models.ApplicationUser", "PostBy")

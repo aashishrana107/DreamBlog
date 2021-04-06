@@ -1,17 +1,17 @@
-﻿@model DreamBlog.Models.BlogViewModel.CreateViewModel
-
+﻿@model DreamBlog.Models.BlogViewModel.EditViewModel
 @*02.25 9*@
 
 
 <div class="container-fluid">
-    <h1 class="mt-4">Create</h1>
+    <h1 class="mt-4">Edit</h1>
     <div class="row">
         <div class="col-lg-6">
             <div class="card mb-4">
-                <form asp-controller="Blog" asp-action="Add" method="post" enctype="multipart/form-data">
+                <form asp-controller="Blog" asp-action="Update" method="post" enctype="multipart/form-data">
+                    <input asp-for="Blog.Id" readonly hidden />
                     <div class="card-header">
                         <i class="fas fa-pen-fancy mr-1"></i>
-                        Write a Post
+                        Edit this Post
                     </div>
                     <div class="card-body">
                         <div class="form-group">
@@ -39,7 +39,7 @@
                             <label>Publish now?</label>
                             <input type="checkbox" data-toggle="toggle" asp-for="Blog.Published">
                             </br>
-                            <button class="btn btn-primary" type="submit">Submit</button>
+                            <button class="btn btn-primary" type="submit">Update</button>
                         </div>
                     </div>
                 </form>

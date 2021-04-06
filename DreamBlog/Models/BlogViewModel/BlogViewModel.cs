@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace DreamBlog.Models.BlogViewModel
 {
-    public class CreateBlogViewModel
+    public class BlogViewModel
     {
         public Blog Blog { get; set; }
+        public Comment Comment { get; set; }
     }
 }

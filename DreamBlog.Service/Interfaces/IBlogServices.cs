@@ -8,6 +8,12 @@ namespace DreamBlog.Service.Interfaces
 {
     public interface IBlogServices
     {
-        Task<Blog> Add(Blog blog);  
+        Task<Blog> Add(Blog blog);
+        IEnumerable<Blog> GetBlogs(ApplicationUser applicationUser);
+        Blog GetBlog(int blogId);
+        Task<Blog> Update(Blog blog);
+        IEnumerable<Blog> GetBlogs(string searchString);
+        Comment GetComment(int commentId);
+        Task<Comment> Add(Comment comment);
     }
 }

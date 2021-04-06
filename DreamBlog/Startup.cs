@@ -1,8 +1,11 @@
+using DreamBlog.Authorization;
 using DreamBlog.BusinessManagers;
+using DreamBlog.BusinessManagers.Interfaces;
 using DreamBlog.Data;
 using DreamBlog.Data.Models;
 using DreamBlog.Service;
 using DreamBlog.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,9 +14,11 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,12 +44,19 @@ namespace DreamBlog
             //Add Reference With Contract Ashish
             services.AddScoped<IBlogBusinessManager, BlogBusinessManager>();
             services.AddScoped<IBlogServices, BlogServices>();
+            services.AddScoped<IAdminBusinessManager, AdminBusinessManager>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IHomeBusinessManager, HomeBusinessManager>();
+
 
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
+
+            services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+            services.AddTransient<IAuthorizationHandler, BlogAuthorizationHandler>();
             //services.AddCustomServices();
         }
 
