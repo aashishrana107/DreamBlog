@@ -36,6 +36,7 @@ namespace DreamBlog.Service
         {
             return applicationDbContext.Blogs
                 .Include(x=>x.Creator)
+                .Include(x=>x.Category)
                 .Include(x=>x.Comments)
                     .ThenInclude(Comment=>Comment.PostBy)
                 .Include(x => x.Comments)
@@ -74,6 +75,15 @@ namespace DreamBlog.Service
                 .Include(comment => comment.Blog)
                 .Include(comment => comment.Parent)
                 .FirstOrDefault(comment => comment.Id == commentId);
+        }
+
+        public List<Category> GetCategory()
+        {
+            return applicationDbContext.Categories.ToList();
+        }
+        public Category GetCategoryById(int Id)
+        {
+            return applicationDbContext.Categories.FirstOrDefault(x => x.Id == Id);
         }
     }
 }

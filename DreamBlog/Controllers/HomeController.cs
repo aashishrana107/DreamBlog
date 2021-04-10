@@ -34,6 +34,18 @@ namespace DreamBlog.Controllers
         {
             return View();
         }
+        public IActionResult Contact_Us()
+        {
+            return View();
+        }
+        public IActionResult About_Us()
+        {
+            return View();
+        }
+        public IActionResult DMCA()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

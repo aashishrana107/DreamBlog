@@ -1,4 +1,5 @@
 ﻿using DreamBlog.BusinessManagers;
+using DreamBlog.Data.Models;
 using DreamBlog.Models.BlogViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,8 @@ namespace DreamBlog.Controllers
         }
         public IActionResult Create()
         {
-            return View(new CreateViewModel());
+           
+            return View(new CreateViewModel() { Categories=blogBusinessManager.GetCategories()});
         }
         [HttpPost]
         public async Task<IActionResult> Add(CreateViewModel createBlogViewModel)
@@ -40,6 +42,7 @@ namespace DreamBlog.Controllers
         }
         public async Task<IActionResult> Edit(int? id)
         {
+            
             var actionResult = await blogBusinessManager.GetEditViewModel(id, User);
             if(actionResult.Result is null)
             {

@@ -1,11 +1,17 @@
 ﻿<footer class="py-4 bg-light mt-auto">
     <div class="container-fluid">
         <div class="d-flex align-items-center justify-content-between small">
-            <div class="text-muted">Copyright &copy; DreamBlog @DateTime.Now.Year</div>
+            <div class="text-muted">Copyright &copy; GaribBro @DateTime.Now.Year</div>
             <div>
                 <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
                 &middot;
-                <a href="#">Terms &amp; Conditions</a>
+                <a asp-controller="Home" asp-action="Contact_Us">Contact_Us</a>
+                &middot;
+                <a asp-controller="Home" asp-action="About_Us">About Us</a>
+                &middot;
+                <a asp-controller="Home" asp-action="DMCA">DMCA</a>
+                &middot;
+                <a asp-controller="Home" asp-action="Privacy">Terms &amp; Conditions</a>
             </div>
         </div>
     </div>

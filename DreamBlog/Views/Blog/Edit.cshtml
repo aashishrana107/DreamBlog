@@ -23,6 +23,12 @@
                             <span asp-validation-for="BlogHeaderImage" class="text-danger"></span>
                         </div>
                         <div class="form-group">
+                            <label asp-for="Blog.Category"></label>
+                            @*@Html.DropDownListFor(model => model.Category, new SelectList(Model.Category, "Value", "Text"), new { @class = "form-control" })*@
+                            @Html.DropDownListFor(model => model.Blog.Category.Id, new SelectList(Model.Category, "Value", "Text"), new { @class = "form-control" })
+                            <span asp-validation-for="Blog.Category" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
                             <label asp-for="Blog.Title"></label>
                             <input asp-for="Blog.Title" class="form-control" required />
                             <span asp-validation-for="Blog.Title" class="text-danger"></span>

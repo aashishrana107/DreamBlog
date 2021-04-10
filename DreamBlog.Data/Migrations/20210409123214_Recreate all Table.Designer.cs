@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DreamBlog.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210405153906_Change Post Name to Comment")]
-    partial class ChangePostNametoComment
+    [Migration("20210409123214_Recreate all Table")]
+    partial class RecreateallTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,6 +25,9 @@ namespace DreamBlog.Data.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AboutContent")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -72,6 +75,9 @@ namespace DreamBlog.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SubHeader")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -105,6 +111,9 @@ namespace DreamBlog.Data.Migrations
                     b.Property<string>("ApproverId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
@@ -114,8 +123,14 @@ namespace DreamBlog.Data.Migrations
                     b.Property<string>("CreatorId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Meta")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("TagId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -123,13 +138,41 @@ namespace DreamBlog.Data.Migrations
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UrlSlug")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApproverId");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("CreatorId");
 
+                    b.HasIndex("TagId");
+
                     b.ToTable("Blogs");
+                });
+
+            modelBuilder.Entity("DreamBlog.Data.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UrlSlug")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("DreamBlog.Data.Models.Comment", b =>
@@ -163,6 +206,27 @@ namespace DreamBlog.Data.Migrations
                     b.HasIndex("PostById");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("DreamBlog.Data.Models.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UrlSlug")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -306,9 +370,17 @@ namespace DreamBlog.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ApproverId");
 
+                    b.HasOne("DreamBlog.Data.Models.Category", "Category")
+                        .WithMany("Blogs")
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("DreamBlog.Data.Models.ApplicationUser", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorId");
+
+                    b.HasOne("DreamBlog.Data.Models.Tag", null)
+                        .WithMany("Blogs")
+                        .HasForeignKey("TagId");
                 });
 
             modelBuilder.Entity("DreamBlog.Data.Models.Comment", b =>
@@ -318,7 +390,7 @@ namespace DreamBlog.Data.Migrations
                         .HasForeignKey("BlogId");
 
                     b.HasOne("DreamBlog.Data.Models.Comment", "Parent")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("ParentId");
 
                     b.HasOne("DreamBlog.Data.Models.ApplicationUser", "PostBy")

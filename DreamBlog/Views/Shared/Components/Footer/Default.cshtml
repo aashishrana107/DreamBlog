@@ -29,7 +29,21 @@
                         </a>
                     </li>
                 </ul>
-                <p class="copyright text-muted">Copyright &copy; DreamBlog @DateTime.Now.Year</p>
+                <div class="d-flex align-items-center justify-content-between small">
+                    @*<a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+        &middot;
+        <a href="#">Terms &amp; Conditions</a>*@
+                    <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+                    &middot;
+                    <a asp-controller="Home" asp-action="Contact_Us">Contact_Us</a>
+                    &middot;
+                    <a asp-controller="Home" asp-action="About_Us">About Us</a>
+                    &middot;
+                    <a asp-controller="Home" asp-action="DMCA">DMCA</a>
+                    &middot;
+                    <a asp-controller="Home" asp-action="Privacy">Terms &amp; Conditions</a>
+                </div>
+                <p class="copyright text-muted">Copyright &copy; Garibbro @DateTime.Now.Year</p>
             </div>
         </div>
     </div>

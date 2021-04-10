@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PagedList.Core;
 using System;
 using System.Collections.Generic;
@@ -72,6 +73,7 @@ namespace DreamBlog.BusinessManagers
             blog.Creator = await userManager.GetUserAsync(claimsPrincipal);
             blog.CreatedOn = DateTime.Now;
             blog.UpdatedOn = DateTime.Now;
+            blog.Category = blogServices.GetCategoryById(createViewModel.Blog.Category.Id);
             blog =await blogServices.Add(blog);
             string webRootPath = webHostEnvironment.WebRootPath;
             string pathToImage = $@"{webRootPath}\UserFiles\Blogs\{blog.Id}\HeaderImage.jpg";
@@ -98,7 +100,8 @@ namespace DreamBlog.BusinessManagers
             blog.Title = editViewModel.Blog.Title;
             blog.Content = editViewModel.Blog.Content;
             blog.UpdatedOn = DateTime.Now;
-            if(editViewModel.BlogHeaderImage!=null)
+            blog.Category= blogServices.GetCategoryById(editViewModel.Blog.Category.Id);
+            if (editViewModel.BlogHeaderImage!=null)
             {
                 string webRootPath = webHostEnvironment.WebRootPath;
                 string pathToImage = $@"{webRootPath}\UserFiles\Blogs\{blog.Id}\HeaderImage.jpg";
@@ -139,7 +142,9 @@ namespace DreamBlog.BusinessManagers
 
             return new EditViewModel
             {
-                Blog = blog
+                Blog = blog,
+                //Category= GetCategoriesById(blog.Category.Id)
+                Category= GetCategories()
             };
         }
 
@@ -187,5 +192,47 @@ namespace DreamBlog.BusinessManagers
 
             return await blogServices.Add(comment);
         }
+
+        public List<Category> GetCategoryList()
+        {
+            var category = blogServices.GetCategory();
+            return category;
+        }
+
+        public IEnumerable<SelectListItem> GetCategories()
+        {
+            
+            List<SelectListItem> categories = blogServices.GetCategory()
+                .OrderBy(n => n.Name)
+                    .Select(n =>
+                    new SelectListItem
+                    {
+                        Value = n.Id.ToString(),
+                        Text = n.Name
+                    }).ToList();
+            var item = new SelectListItem()
+            {
+                Value = null,
+                Text = "--- select Category ---"
+            };
+            categories.Insert(0, item);
+            return new SelectList(categories, "Value", "Text");
+            
+        }
+        public IEnumerable<SelectListItem> GetCategoriesById(int Id)
+        {
+            IEnumerable<SelectListItem> regions = blogServices.GetCategory()
+                        .OrderBy(n => n.Name)
+                        .Where(n => n.Id == Id)
+                        .Select(n =>
+                           new SelectListItem
+                           {
+                               Value = n.Id.ToString(),
+                               Text = n.Name
+                           }).ToList();
+            return new SelectList(regions, "Value", "Text");
+
+        }
+
     }
 }

@@ -109,6 +109,9 @@ namespace DreamBlog.Data.Migrations
                     b.Property<string>("ApproverId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
@@ -118,8 +121,14 @@ namespace DreamBlog.Data.Migrations
                     b.Property<string>("CreatorId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Meta")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("Published")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("TagId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -127,13 +136,41 @@ namespace DreamBlog.Data.Migrations
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UrlSlug")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApproverId");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("CreatorId");
 
+                    b.HasIndex("TagId");
+
                     b.ToTable("Blogs");
+                });
+
+            modelBuilder.Entity("DreamBlog.Data.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UrlSlug")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("DreamBlog.Data.Models.Comment", b =>
@@ -167,6 +204,27 @@ namespace DreamBlog.Data.Migrations
                     b.HasIndex("PostById");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("DreamBlog.Data.Models.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UrlSlug")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -310,9 +368,17 @@ namespace DreamBlog.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ApproverId");
 
+                    b.HasOne("DreamBlog.Data.Models.Category", "Category")
+                        .WithMany("Blogs")
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("DreamBlog.Data.Models.ApplicationUser", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorId");
+
+                    b.HasOne("DreamBlog.Data.Models.Tag", null)
+                        .WithMany("Blogs")
+                        .HasForeignKey("TagId");
                 });
 
             modelBuilder.Entity("DreamBlog.Data.Models.Comment", b =>

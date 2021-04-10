@@ -1,5 +1,6 @@
 ﻿using DreamBlog.Data.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,5 +14,6 @@ namespace DreamBlog.Models.BlogViewModel
         [Required,Display(Name ="Header Image")]
         public IFormFile BlogHeaderImage { get; set; }
         public Blog Blog { get; set; }
+        public IEnumerable<SelectListItem> Categories { get; set; }
     }
 }

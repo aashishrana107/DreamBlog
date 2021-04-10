@@ -15,5 +15,7 @@ namespace DreamBlog.Service.Interfaces
         IEnumerable<Blog> GetBlogs(string searchString);
         Comment GetComment(int commentId);
         Task<Comment> Add(Comment comment);
+        List<Category> GetCategory();
+        Category GetCategoryById(int Id);
     }
 }
