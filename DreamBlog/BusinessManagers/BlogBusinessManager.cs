@@ -1,4 +1,6 @@
-﻿using DreamBlog.Authorization;
+﻿using AspNetCore.SEOHelper;
+using AspNetCore.SEOHelper.Sitemap;
+using DreamBlog.Authorization;
 using DreamBlog.Data.Models;
 using DreamBlog.Models.BlogViewModel;
 using DreamBlog.Models.HomeViewModel;
@@ -36,9 +38,21 @@ namespace DreamBlog.BusinessManagers
 
         public IndexViewModel GetIndexViewModel(string searchString, int? page)
         {
-            int pageSize = 12;
+            int pageSize = 20;
             int pageNumber = page ?? 1;
             var blogs = blogServices.GetBlogs(searchString ?? string.Empty).Where(x=>x.Published);
+
+            //https://github.com/esty-c/AspNetCore.SEOHelper/tree/e66b8f24b02e53019bf895871aad5d429d35d316
+            //var obj = new SitemapDocument();
+            //List<SitemapNode> list = new List<SitemapNode>();
+            //foreach (var blog in blogs)
+            //{
+            //    list.Add(new SitemapNode { LastModified = blog.UpdatedOn, Priority = 0.8, Url = $@"http://garibbro.com/Post/{blog.Id}", Frequency = SitemapFrequency.Yearly });
+            //}
+            //var baseDirectroy = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin"));
+            //obj.CreateSitemapXML(list, baseDirectroy);
+            //var items = obj.LoadFromFile(baseDirectroy);
+
             return new IndexViewModel
             {
                 Blogs=new StaticPagedList<Blog>(blogs.Skip((pageNumber-1)*pageSize).Take(pageSize),pageNumber,pageSize,blogs.Count()),
@@ -73,16 +87,19 @@ namespace DreamBlog.BusinessManagers
             blog.Creator = await userManager.GetUserAsync(claimsPrincipal);
             blog.CreatedOn = DateTime.Now;
             blog.UpdatedOn = DateTime.Now;
+            blog.UrlSlug = UrlSlug(createViewModel.Blog.Title);
             blog.Category = blogServices.GetCategoryById(createViewModel.Blog.Category.Id);
             blog =await blogServices.Add(blog);
-            string webRootPath = webHostEnvironment.WebRootPath;
-            string pathToImage = $@"{webRootPath}\UserFiles\Blogs\{blog.Id}\HeaderImage.jpg";
-            EnsureFolder(pathToImage);
-            using (var filestream=new FileStream(pathToImage, FileMode.Create))
+            if (createViewModel.BlogHeaderImage != null)
             {
-                await createViewModel.BlogHeaderImage.CopyToAsync(filestream);
+                string webRootPath = webHostEnvironment.WebRootPath;
+                string pathToImage = $@"{webRootPath}\UserFiles\Blogs\{blog.Id}\HeaderImage.jpg";
+                EnsureFolder(pathToImage);
+                using (var filestream = new FileStream(pathToImage, FileMode.Create))
+                {
+                    await createViewModel.BlogHeaderImage.CopyToAsync(filestream);
+                }
             }
-
                 return blog;
             //return await blogServices.Add(blog);
         }
@@ -100,6 +117,20 @@ namespace DreamBlog.BusinessManagers
             blog.Title = editViewModel.Blog.Title;
             blog.Content = editViewModel.Blog.Content;
             blog.UpdatedOn = DateTime.Now;
+            blog.Meta = PascalCaseExtensionMethod.ToPascalCase(editViewModel.Blog.Title);
+            blog.UrlSlug = SEOFriendlyURLExtension.ToSEOQueryString(editViewModel.Blog.Title);
+
+            //var obj = new SitemapDocument();
+            //List<SitemapNode> list = new List<SitemapNode>();
+            //list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.8, Url = "http://codingwithesty.com/serilog-mongodb-in-asp-net-core", Frequency = SitemapFrequency.Daily });
+            //list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.8, Url = "http://codingwithesty.com/logging-in-asp-net-core", Frequency = SitemapFrequency.Yearly });
+            //list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.7, Url = "http://codingwithesty.com/robots-txt-in-asp-net-core", Frequency = SitemapFrequency.Monthly });
+            //list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.5, Url = "http://codingwithesty.com/versioning-asp.net-core-apiIs-with-swagger", Frequency = SitemapFrequency.Weekly });
+            //list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.4, Url = "http://codingwithesty.com/configuring-swagger-asp-net-core-web-api", Frequency = SitemapFrequency.Never });
+            //var baseDirectroy = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin"));
+            //obj.CreateSitemapXML(list, baseDirectroy);
+            //var items = obj.LoadFromFile(baseDirectroy);
+
             blog.Category= blogServices.GetCategoryById(editViewModel.Blog.Category.Id);
             if (editViewModel.BlogHeaderImage!=null)
             {
@@ -233,6 +264,12 @@ namespace DreamBlog.BusinessManagers
             return new SelectList(regions, "Value", "Text");
 
         }
-
+        
+        public string UrlSlug(string title)
+        {
+            string localtitle;
+            localtitle = title.Replace(' ', '_');
+            return localtitle;
+        }
     }
 }

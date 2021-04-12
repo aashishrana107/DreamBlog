@@ -14,6 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.SEOHelper" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.13" />
@@ -30,6 +31,10 @@
   <ItemGroup>
     <ProjectReference Include="..\DreamBlog.Data\DreamBlog.Data.csproj" />
     <ProjectReference Include="..\DreamBlog.Service\DreamBlog.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\UserFiles\Blogs\" />
   </ItemGroup>
 
 </Project>

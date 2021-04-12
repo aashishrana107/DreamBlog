@@ -1,3 +1,4 @@
+using AspNetCore.SEOHelper;
 using DreamBlog.Authorization;
 using DreamBlog.BusinessManagers;
 using DreamBlog.BusinessManagers.Interfaces;
@@ -89,6 +90,10 @@ namespace DreamBlog
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+
+            //routing for sitemap.txt
+            app.UseXMLSitemap(env.ContentRootPath);
 
             app.UseEndpoints(endpoints =>
             {
